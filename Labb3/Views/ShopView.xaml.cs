@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ObjectiveC;
+using System.Windows;
 using System.Windows.Controls;
 using Labb3ProgTemplate.DataModels.Products;
 using Labb3ProgTemplate.Enums;
@@ -26,6 +28,8 @@ namespace Labb3ProgTemplate.Views
             // Initialisera listan över tillgängliga produkter (du behöver hämta detta från någonstans, t.ex. ProductManager)
 
             UpdateProductList();
+
+            UpdateShoppingCart();
 
         }
 
@@ -73,10 +77,10 @@ namespace Labb3ProgTemplate.Views
                     shoppingCart.Remove(selectedProduct);
 
                     // Uppdatera visningen av kundvagnen i UI
+                    UpdateShoppingCart();
                 }
             }
-
-            UpdateShoppingCart();
+           
         }
 
         private void AddBtn_Click(object sender, System.Windows.RoutedEventArgs e)

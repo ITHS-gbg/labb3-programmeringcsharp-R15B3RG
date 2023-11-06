@@ -61,6 +61,16 @@ namespace Labb3ProgTemplate.Views
             string username = RegisterName.Text;
             string password = RegisterPwd.Password;
 
+            // Kontrollera om användaren redan finns
+            if (UserManager.Users.Any(u => u.Name == username))
+            {
+                // Användaren finns redan, visa meddelande
+                MessageBox.Show("Användaren finns redan.");
+                // Rensa TextBox-kontrollerna
+                ClearRegistrationFields();
+                return;
+            }
+
             // Skapa en ny Admin
             Admin newAdmin = new Admin(username, password);
 
@@ -70,6 +80,8 @@ namespace Labb3ProgTemplate.Views
             // Spara användarna till fil
             UserManager.SaveUsersToFile();
 
+            // Rensa TextBox-kontrollerna
+            ClearRegistrationFields();
         }
 
         private void RegisterCustomerBtn_OnClickmerBtn_Click(object sender, RoutedEventArgs e)
@@ -78,13 +90,32 @@ namespace Labb3ProgTemplate.Views
             string username = RegisterName.Text;
             string password = RegisterPwd.Password;
 
+            // Kontrollera om användaren redan finns
+            if (UserManager.Users.Any(u => u.Name == username))
+            {
+                // Användaren finns redan, visa meddelande
+                MessageBox.Show("Användaren finns redan.");
+                // Rensa TextBox-kontrollerna
+                ClearRegistrationFields();
+                return;
+            }
+
+            // Skapa en ny Customer
             Customer newCustomer = new Customer(username, password);
 
             ((List<User>)UserManager.Users).Add(newCustomer);
 
             UserManager.SaveUsersToFile();
 
-            
+            // Rensa TextBox-kontrollerna
+            ClearRegistrationFields();
+        }
+
+        private void ClearRegistrationFields()
+        {
+            // Rensa TextBox-kontrollerna
+            RegisterName.Clear();
+            RegisterPwd.Clear();
         }
     }
 }

@@ -66,7 +66,13 @@ public static class UserManager
 
     public static void LogOut()
     {
-        throw new NotImplementedException();
+        // Spara kundvagnen innan utloggning
+        SaveUserCart(CurrentUser);
+
+        // Implementera utloggning här...
+
+        // Efter utloggning, ladda kundvagnen för nästa inloggad kund
+        LoadUserCart(CurrentUser);
     }
 
     public static async Task SaveUsersToFile() //Allt är korrekt i denna kod! RÖR EJ!
@@ -89,6 +95,11 @@ public static class UserManager
         {
             sw.WriteLine(json);
         };
+
+        foreach (var customer in _users.OfType<Customer>())
+        {
+            SaveUserCart(customer);
+        }
     }
 
     public static async Task LoadUsersFromFile() //Allt är korrekt i denna kod! RÖR EJ!
@@ -136,6 +147,52 @@ public static class UserManager
             }
 
             ((List<User>)_users).AddRange(deserialisedUser);
+        }
+
+        foreach (var customer in _users.OfType<Customer>())
+        {
+            LoadUserCart(customer);
+        }
+    }
+
+    private static void SaveUserCart(User user)
+    {
+        if (user is Customer customer)
+        {
+            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CartsJson");
+            Directory.CreateDirectory(directory);
+            var filepath = Path.Combine(directory, $"{customer.Name}_Cart.json");
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            var json = JsonSerializer.Serialize(customer.Cart, jsonOptions);
+
+            using (var sw = new StreamWriter(filepath))
+            {
+                sw.WriteLine(json);
+            }
+        }
+    }
+
+    private static void LoadUserCart(User user)
+    {
+        if (user is Customer customer)
+        {
+            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CartsJson");
+            var filepath = Path.Combine(directory, $"{customer.Name}_Cart.json");
+
+            if (File.Exists(filepath))
+            {
+                var text = File.ReadAllText(filepath);
+                var cart = JsonSerializer.Deserialize<List<Product>>(text);
+
+                // Uppdatera kundvagnen för den inloggade kunden
+                customer.Cart.Clear();
+                customer.Cart.AddRange(cart);
+            }
         }
     }
 }

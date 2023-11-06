@@ -107,6 +107,12 @@ public static class ProductManager
             json = sr.ReadToEnd();
         }
 
+        // Deserialisera JSON-innehållet till en temporär lista
+        var deserializedProducts = JsonSerializer.Deserialize<List<NewProduct>>(json);
+
+        // Rensa den befintliga produklistan innan du lägger till de deserialiserade produkterna
+        ((List<Product>)_products).Clear();
+
         // Initierar en ny lista för att hålla deserialiserade User-objekt.
         ((List<Product>)_products).AddRange(JsonSerializer.Deserialize<List<NewProduct>>(json));
 
