@@ -1,14 +1,23 @@
-﻿namespace Labb3ProgTemplate.DataModels.Products;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Labb3ProgTemplate.Enums;
 
-public abstract class Product
+namespace Labb3ProgTemplate.DataModels.Products;
+
+public abstract class Product 
 {
     public string Name { get; set; }
-
+   
     public double Price { get; set; }
+    
 
-    protected Product(string name, double price)
+    public ProductTypes Type { get; }
+
+    protected Product(string name, double price, ProductTypes type)
     {
         Name = name;
         Price = price;
+        Type = type;
     }
 }

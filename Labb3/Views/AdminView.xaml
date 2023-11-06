@@ -55,12 +55,12 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Content="Name" />
-            <TextBox Grid.Row="0" Grid.Column="1" />
+            <TextBox Name="NameTextBox" Grid.Row="0" Grid.Column="1" />
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
                 Content="Price" />
-            <TextBox Grid.Row="1" Grid.Column="1" />
+            <TextBox Name="PriceTextBox" Grid.Row="1" Grid.Column="1" />
             <Button
                 Name="SaveBtn"
                 Grid.Row="2"

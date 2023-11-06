@@ -8,6 +8,7 @@ public class Admin : User
 
     public Admin(string name, string password) : base(name, password)
     {
+        Type = UserTypes.Admin;
     }
 
 }

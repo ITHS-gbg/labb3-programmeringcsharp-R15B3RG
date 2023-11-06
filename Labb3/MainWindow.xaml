@@ -14,13 +14,13 @@
     <Grid>
         <TabControl>
             <TabItem Name="LoginTab" Header="Login">
-                <views:LoginView />
+                <views:LoginView x:Name="LoginView0" />
             </TabItem>
-            <TabItem Name="AdminTab" Header="Admin">
-                <views:AdminView />
+            <TabItem Name="AdminTab" Header="Admin" Visibility="Collapsed">
+                <views:AdminView x:Name="AdminView0" />
             </TabItem>
-            <TabItem Name="ShopTab" Header="Customer">
-                <views:ShopView />
+            <TabItem Name="ShopTab" Header="Customer" Visibility="Collapsed">
+                <views:ShopView x:Name="ShopView0"/>
             </TabItem>
         </TabControl>
     </Grid>

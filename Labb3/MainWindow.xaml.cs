@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿
+using System.Windows;
 using Labb3ProgTemplate.Managerrs;
+using Labb3ProgTemplate.Views;
 
 namespace Labb3ProgTemplate
 {
@@ -10,8 +12,13 @@ namespace Labb3ProgTemplate
     {
         public MainWindow()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+
+            UserManager.LoadUsersFromFile();
+            
             UserManager.CurrentUserChanged += UserManager_CurrentUserChanged;
+
+            ProductManager.LoadProductsFromFile();
         }
 
         private void UserManager_CurrentUserChanged()
@@ -20,14 +27,38 @@ namespace Labb3ProgTemplate
             {
                 AdminTab.Visibility = Visibility.Visible;
                 ShopTab.Visibility = Visibility.Visible;
-                LoginTab.Visibility = Visibility.Collapsed;
+                LoginTab.Visibility = Visibility.Hidden;
+
+                AdminTab.IsSelected = true;
+                ShopTab.IsSelected = false;
+                LoginTab.IsSelected = false;
+            }
+            else if (UserManager.IsCustomerLoggedIn)
+            {
+                ShopTab.Visibility = Visibility.Visible;
+                AdminTab.Visibility = Visibility.Hidden;
+                LoginTab.Visibility = Visibility.Hidden;
+
+                ShopTab.IsSelected = true;
+                AdminTab.IsSelected = false;
+                LoginTab.IsSelected = false;
             }
             else
             {
-                ShopTab.Visibility = Visibility.Visible;
-                AdminTab.Visibility = Visibility.Collapsed;
-                LoginTab.Visibility = Visibility.Collapsed;
+                ShopTab.Visibility = Visibility.Hidden;
+                AdminTab.Visibility = Visibility.Hidden;
+                LoginTab.Visibility = Visibility.Visible;
+
+                LoginTab.IsSelected = true;
+                ShopTab.IsSelected = false;
+                AdminTab.IsSelected = false;
             }
+
+        }
+
+        private void LoginView_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
