@@ -53,6 +53,8 @@ namespace Labb3ProgTemplate.Views
 
             UserManager.ChangeCurrentUser(username, password);
 
+            UserManager.LoadUsersFromFile();
+
         }
 
         private void RegisterAdminBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -82,6 +84,8 @@ namespace Labb3ProgTemplate.Views
 
             // Rensa TextBox-kontrollerna
             ClearRegistrationFields();
+
+            MessageBox.Show("Ny Admin skapad!");
         }
 
         private void RegisterCustomerBtn_OnClickmerBtn_Click(object sender, RoutedEventArgs e)
@@ -109,6 +113,8 @@ namespace Labb3ProgTemplate.Views
 
             // Rensa TextBox-kontrollerna
             ClearRegistrationFields();
+
+            MessageBox.Show("Ny Customer skapad!");
         }
 
         private void ClearRegistrationFields()

@@ -30,11 +30,16 @@ namespace Labb3ProgTemplate.Views
             UserManager.CurrentUserChanged += UserManager_CurrentUserChanged;
             ProductManager.ProductListChanged += UpdateProductList;
 
+            
+            UpdateProductList();
         }
         
 
         private void UpdateProductList()
         {
+
+            ProductManager.LoadProductsFromFile();
+
             ProdList.Items.Clear();
 
             foreach (var product in ProductManager.Products)

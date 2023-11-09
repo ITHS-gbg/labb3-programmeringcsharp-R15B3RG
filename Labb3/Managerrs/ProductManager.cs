@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Xml.Linq;
 using Labb3ProgTemplate.DataModels.Products;
 using Labb3ProgTemplate.DataModels.Users;
+using Labb3ProgTemplate.Views;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Labb3ProgTemplate.Managerrs;
@@ -38,6 +39,7 @@ public static class ProductManager
             ((List<Product>)_products).Add(product);
             ProductListChanged?.Invoke();
         }
+
     }
 
     public static void RemoveProduct(Product product)
@@ -50,7 +52,7 @@ public static class ProductManager
 
 
 
-    public static void Checkout(User currentUser, List<Product> shoppingCart)
+    public static void Checkout(User currentUser, List<NewProduct> shoppingCart) //Ta bort?
     {
         
     }
@@ -117,7 +119,7 @@ public static class ProductManager
         ((List<Product>)_products).AddRange(JsonSerializer.Deserialize<List<NewProduct>>(json));
 
         
-        ProductListChanged.Invoke();
+        //ProductListChanged.Invoke();
     }
 
 }
