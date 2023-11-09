@@ -30,6 +30,7 @@ namespace Labb3ProgTemplate.Views
             UserManager.CurrentUserChanged += UserManager_CurrentUserChanged;
             ProductManager.ProductListChanged += UpdateProductList;
 
+            ProductManager.LoadProductsFromFile();
             
             UpdateProductList();
         }
@@ -37,8 +38,6 @@ namespace Labb3ProgTemplate.Views
 
         private void UpdateProductList()
         {
-
-            ProductManager.LoadProductsFromFile();
 
             ProdList.Items.Clear();
 
@@ -75,12 +74,16 @@ namespace Labb3ProgTemplate.Views
                 ProductManager.AddProduct(newProduct);
 
                 ProductManager.SaveProductsToFile();
+
+                UpdateProductList();
             }
             else
             {
                 // Visa ett meddelande om ogiltig inmatning
                 MessageBox.Show("Var god och mata in ett pris med siffror!");
             }
+
+            
 
         }
 
@@ -112,12 +115,15 @@ namespace Labb3ProgTemplate.Views
 
                     // Optional: You might want to save the changes to the file.
                     ProductManager.SaveProductsToFile();
+
+                    UpdateProductList();
                 }
             }
             else
             {
                 MessageBox.Show("Var god och välj en giltig vara att ta bort.");
             }
+
         }
 
         private void LogoutBtn_Click(object sender, System.Windows.RoutedEventArgs e)

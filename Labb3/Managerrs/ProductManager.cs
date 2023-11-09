@@ -24,9 +24,6 @@ public static class ProductManager
     public static event Action ProductListChanged;
 
     
-
-
-
     public static void AddProduct(Product product) //Allt är korrekt i denna kod! RÖR EJ!
     {
 
