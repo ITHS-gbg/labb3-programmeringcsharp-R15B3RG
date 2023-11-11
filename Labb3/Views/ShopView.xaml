@@ -48,7 +48,7 @@
             Name="CartList"
             Grid.Row="2"
             Grid.Column="2"
-            SelectedItem="{Binding Cart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            SelectedItem="{Binding SelectedProducts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Button
             Name="RemoveBtn"
             Grid.Row="3"

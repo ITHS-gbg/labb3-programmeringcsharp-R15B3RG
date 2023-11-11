@@ -27,13 +27,21 @@ namespace Labb3ProgTemplate.Views
             InitializeComponent();
 
             UserManager.CurrentUserChanged += UserManager_CurrentUserChanged;
+
+            
             ProductManager.ProductListChanged += ProductManager_ProductListChanged;
+
+            ServiceCenter.GetUsers();
 
             ProductManager.LoadProductsFromFile();
 
             // Initialisera listan över tillgängliga produkter (du behöver hämta detta från någonstans, t.ex. ProductManager)
 
+            UserManager.ShoppingCartChanged += () => UpdateShoppingCart();
+
             UpdateProductList();
+
+            ServiceCenter.LoadShoppingCart(UserManager.CurrentUser);
 
         }
 
@@ -47,21 +55,18 @@ namespace Labb3ProgTemplate.Views
         {
             if (UserManager.CurrentUser != null)
             {
-                shoppingCart = UserManager.CurrentUser.Cart;
+                shoppingCart = UserManager.CurrentUser.SelectedProducts;
 
                 if (UserManager.CurrentUser is Customer customer)
                 {
 
-                    UserManager.LoadUsersFromFile();
-
-                    foreach (var product in UserManager.CurrentUser.Cart)
+                    foreach (var product in UserManager.CurrentUser.SelectedProducts)
 
                     {
 
                         CartList.Items.Add($"{product.Name} - {product.Price:C2}");
                     }
                 }
-
                 // Uppdatera gränssnittet efter att ha laddat kundvagnen
                 UpdateShoppingCart();
             }
@@ -86,11 +91,16 @@ namespace Labb3ProgTemplate.Views
             // Clear existing items in the shopping cart list
             CartList.Items.Clear();
 
-            // Add the updated items to the shopping cart list
-            foreach (var product in shoppingCart)
+            // Check if shoppingCart is not null
+            if (shoppingCart != null)
             {
-                CartList.Items.Add($"{product.Name} - {product.Price:C2}");
+                // Add the updated items to the shopping cart list
+                foreach (var product in shoppingCart)
+                {
+                    CartList.Items.Add($"{product.Name} - {product.Price:C2}");
+                }
             }
+
         }
 
         private void RemoveBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -108,7 +118,8 @@ namespace Labb3ProgTemplate.Views
                 if (productToRemove != null)
                 {
                     // Remove the product from the shoppingCart.
-                    shoppingCart.Remove(productToRemove);
+
+                    UserManager.CurrentUser.SelectedProducts.Remove(productToRemove);
 
                     // Remove the product from the CartList.
                     CartList.Items.Remove(selectedProductString);
@@ -121,8 +132,12 @@ namespace Labb3ProgTemplate.Views
                     }
 
                 }
+                
 
                 UpdateShoppingCart();
+
+
+                ServiceCenter.SaveShoppingCart(UserManager.CurrentUser);
             }
             else
             {
@@ -139,10 +154,18 @@ namespace Labb3ProgTemplate.Views
 
                 if (selectedProduct != null)
                 {
-                    shoppingCart.Add(selectedProduct);
+
+                    UserManager.CurrentUser.SelectedProducts.Add(selectedProduct);
+
                     UpdateShoppingCart();
+
+
+                    ServiceCenter.SaveShoppingCart(UserManager.CurrentUser);
                 }
             }
+
+            
+
         }
 
         private void LogoutBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -176,6 +199,8 @@ namespace Labb3ProgTemplate.Views
                 // Töm kundvagnen och uppdatera gränssnittet
                 shoppingCart.Clear();
                 UpdateShoppingCart();
+
+                ServiceCenter.SaveShoppingCart(UserManager.CurrentUser);
             }
         }
 

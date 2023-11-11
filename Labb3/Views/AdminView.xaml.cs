@@ -30,6 +30,8 @@ namespace Labb3ProgTemplate.Views
             UserManager.CurrentUserChanged += UserManager_CurrentUserChanged;
             ProductManager.ProductListChanged += UpdateProductList;
 
+            ServiceCenter.GetUsers();
+
             ProductManager.LoadProductsFromFile();
             
             UpdateProductList();
@@ -49,7 +51,21 @@ namespace Labb3ProgTemplate.Views
 
         private void UserManager_CurrentUserChanged()
         {
-
+            if (UserManager.CurrentUser != null && UserManager.IsAdminLoggedIn)
+            {
+                // Visa AdminView när en Admin loggar in
+                Content = new AdminView();
+            }
+            else if (UserManager.CurrentUser != null && UserManager.IsCustomerLoggedIn)
+            {
+                // Visa ShopView när en Customer loggar in
+                Content = new ShopView();
+            }
+            else
+            {
+                // Visa LoginView om ingen användare är inloggad
+                Content = new LoginView();
+            }
         }
         
         private void ProdList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

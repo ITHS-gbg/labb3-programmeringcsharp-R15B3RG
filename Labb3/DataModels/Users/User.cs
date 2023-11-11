@@ -14,13 +14,13 @@ public abstract class User
     
     public abstract UserTypes Type { get; }
 
-    public List<NewProduct> Cart { get; }
+    public List<NewProduct> SelectedProducts { get; set; } = new();
 
     protected User(string name, string password)
     {
         Name = name;
         Password = password;
-        Cart = new List<NewProduct>();
+        SelectedProducts = new List<NewProduct>();
     }
 
     public bool Authenticate(string password)

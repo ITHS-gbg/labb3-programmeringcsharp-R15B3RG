@@ -14,7 +14,7 @@ namespace Labb3ProgTemplate
         {
             InitializeComponent();
 
-            UserManager.LoadUsersFromFile();
+            ServiceCenter.GetUsers();
             
             UserManager.CurrentUserChanged += UserManager_CurrentUserChanged;
 

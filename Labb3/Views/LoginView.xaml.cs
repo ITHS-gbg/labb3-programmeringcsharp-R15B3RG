@@ -24,25 +24,32 @@ namespace Labb3ProgTemplate.Views
 
         private void UserManager_CurrentUserChanged()
         {
-            if (UserManager.CurrentUser != null)
+            var users = ServiceCenter.GetUsers();
+
+            if (users != null && UserManager.CurrentUser != null)
             {
-                // Använd den aktuella användaren för att bestämma vilken vy som ska visas
-                if (UserManager.CurrentUser.Type == UserTypes.Admin)
+                var currentUser = users.FirstOrDefault(u => u.Name == UserManager.CurrentUser.Name);
+
+                if (currentUser != null)
                 {
-                    // Visa AdminView när en Admin loggar in
-                    Content = new AdminView();
-                }
-                else if (UserManager.CurrentUser.Type == UserTypes.Customer)
-                {
-                    // Visa ShopView när en Customer loggar in
-                    Content = new ShopView();
+                    if (currentUser.Type == UserTypes.Admin)
+                    {
+                        // Visa AdminView när en Admin loggar in
+                        Content = new AdminView();
+                    }
+                    else if (currentUser.Type == UserTypes.Customer)
+                    {
+                        // Visa ShopView när en Customer loggar in
+                        Content = new ShopView();
+                    }
+
+                    // Ingen behov av att gå vidare eftersom vi har redan ställt in rätt vy
+                    return;
                 }
             }
-            else
-            {
-                // Visa LoginView om ingen användare är inloggad
-                Content = new LoginView();
-            }
+
+            // Visa LoginView om ingen användare är inloggad eller om användaren inte hittades
+            Content = new LoginView();
         }
 
         private void LoginBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -50,71 +57,51 @@ namespace Labb3ProgTemplate.Views
             // Hämta användarnamn och lösenord från TextBox-kontroller
             string username = LoginName.Text;
             string password = LoginPwd.Password;
+            if (username is "" or null)
+            {
+                MessageBox.Show("Något gick fel");
+                return;
+            }
 
             UserManager.ChangeCurrentUser(username, password);
 
-            UserManager.LoadUsersFromFile();
+            var users = ServiceCenter.GetUsers();
+            if (users == null) return;
+
+            var currentUser = users.FirstOrDefault(x => x.Name.ToLower().Equals(username.ToLower()) && x.Password.Equals(password));
+            if (currentUser == null)
+            {
+                MessageBox.Show("Lösenordet är felaktigt");
+                return;
+            }
 
         }
 
         private void RegisterAdminBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // Hämta användarnamn och lösenord från TextBox-kontroller
-            string username = RegisterName.Text;
-            string password = RegisterPwd.Password;
+            ServiceCenter.AddUser(
+                RegisterName.Text,
+                RegisterPwd.Password,
+                UserTypes.Admin
+                );
 
-            // Kontrollera om användaren redan finns
-            if (UserManager.Users.Any(u => u.Name == username))
-            {
-                // Användaren finns redan, visa meddelande
-                MessageBox.Show("Användaren finns redan.");
-                // Rensa TextBox-kontrollerna
-                ClearRegistrationFields();
-                return;
-            }
-
-            // Skapa en ny Admin
-            Admin newAdmin = new Admin(username, password);
-
-            // Lägg till nya Admin i användarlistan
-            ((List<User>)UserManager.Users).Add(newAdmin);
-
-            // Spara användarna till fil
-            UserManager.SaveUsersToFile();
-
-            // Rensa TextBox-kontrollerna
+            
             ClearRegistrationFields();
 
-            MessageBox.Show("Ny Admin skapad!");
+            
         }
 
         private void RegisterCustomerBtn_OnClickmerBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Hämta användarnamn och lösenord från TextBox-kontroller
-            string username = RegisterName.Text;
-            string password = RegisterPwd.Password;
+            ServiceCenter.AddUser(
+                RegisterName.Text,
+                RegisterPwd.Password,
+                UserTypes.Customer
+            );
+            
 
-            // Kontrollera om användaren redan finns
-            if (UserManager.Users.Any(u => u.Name == username))
-            {
-                // Användaren finns redan, visa meddelande
-                MessageBox.Show("Användaren finns redan.");
-                // Rensa TextBox-kontrollerna
-                ClearRegistrationFields();
-                return;
-            }
-
-            // Skapa en ny Customer
-            Customer newCustomer = new Customer(username, password);
-
-            ((List<User>)UserManager.Users).Add(newCustomer);
-
-            UserManager.SaveUsersToFile();
-
-            // Rensa TextBox-kontrollerna
             ClearRegistrationFields();
 
-            MessageBox.Show("Ny Customer skapad!");
         }
 
         private void ClearRegistrationFields()

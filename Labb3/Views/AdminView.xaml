@@ -55,12 +55,18 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Content="Name" />
-            <TextBox Name="NameTextBox" Grid.Row="0" Grid.Column="1" />
+            <TextBox
+                Name="NameTextBox"
+                Grid.Row="0"
+                Grid.Column="1" />
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
                 Content="Price" />
-            <TextBox Name="PriceTextBox" Grid.Row="1" Grid.Column="1" />
+            <TextBox
+                Name="PriceTextBox"
+                Grid.Row="1"
+                Grid.Column="1" />
             <Button
                 Name="SaveBtn"
                 Grid.Row="2"
@@ -76,7 +82,8 @@
             Grid.Row="4"
             Grid.Column="1"
             Width="100"
-            Margin="10" Click="LogoutBtn_Click">
+            Margin="10"
+            Click="LogoutBtn_Click">
             Log Out
         </Button>
     </Grid>
